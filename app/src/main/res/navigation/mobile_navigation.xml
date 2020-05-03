@@ -11,23 +11,168 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
         android:name="net.osmank3.labebe.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_account"
+            app:destination="@id/nav_account" />
+        <action
+            android:id="@+id/action_home_to_about"
+            app:destination="@id/nav_about" />
+        <action
+            android:id="@+id/action_home_to_firstStartWelcome"
+            app:destination="@id/nav_firstStartWelcome" />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="net.osmank3.labebe.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_account"
+        android:name="net.osmank3.labebe.ui.account.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account">
+        <action
+            android:id="@+id/action_account_to_children"
+            app:destination="@id/nav_children" />
+        <action
+            android:id="@+id/action_account_to_messages"
+            app:destination="@id/nav_messages" />
+        <action
+            android:id="@+id/action_account_to_slideshow"
+            app:destination="@id/nav_statistics" />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="net.osmank3.labebe.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_statistics"
+        android:name="net.osmank3.labebe.ui.statistics.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics" />
+    <fragment
+        android:id="@+id/nav_firstStartWelcome"
+        android:name="net.osmank3.labebe.ui.FirstStartWelcomeFragment"
+        android:label="fragment_first_start_welcome"
+        tools:layout="@layout/fragment_first_start_welcome" >
+        <action
+            android:id="@+id/action_firstStartWelcome_to_signUp"
+            app:destination="@id/nav_signUp" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_signUp"
+        android:name="net.osmank3.labebe.ui.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUp_to_deviceType"
+            app:destination="@id/nav_deviceType" />
+        <action
+            android:id="@+id/action_signUp_to_login"
+            app:destination="@id/nav_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_login"
+        android:name="net.osmank3.labebe.ui.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_login_to_deviceType"
+            app:destination="@id/nav_deviceType" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_deviceType"
+        android:name="net.osmank3.labebe.ui.DeviceTypeFragment"
+        android:label="fragment_device_type"
+        tools:layout="@layout/fragment_device_type" >
+        <action
+            android:id="@+id/action_deviceType_to_appDecisions"
+            app:destination="@id/nav_appDecisions" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_appDecisions"
+        android:name="net.osmank3.labebe.ui.AppDecisionsFragment"
+        android:label="fragment_app_decisions"
+        tools:layout="@layout/fragment_app_decisions" >
+        <action
+            android:id="@+id/action_appDecisions_to_children"
+            app:destination="@id/nav_children" />
+        <action
+            android:id="@+id/action_appDecisions_to_timeLimits"
+            app:destination="@id/nav_timeLimits" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_children"
+        android:name="net.osmank3.labebe.ui.ChildrenFragment"
+        android:label="fragment_children"
+        tools:layout="@layout/fragment_children" >
+        <action
+            android:id="@+id/action_children_to_child"
+            app:destination="@id/nav_child" />
+        <action
+            android:id="@+id/action_children_to_permissions"
+            app:destination="@id/nav_permissions" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_child"
+        android:name="net.osmank3.labebe.ui.ChildFragment"
+        android:label="fragment_child"
+        tools:layout="@layout/fragment_child" >
+        <action
+            android:id="@+id/action_child_to_appDecisions"
+            app:destination="@id/nav_appDecisions" />
+        <action
+            android:id="@+id/action_child_to_timeLimits"
+            app:destination="@id/nav_timeLimits" />
+        <argument
+            android:name="childId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_timeLimits"
+        android:name="net.osmank3.labebe.ui.TimeLimitsFragment"
+        android:label="fragment_time_limits"
+        tools:layout="@layout/fragment_time_limits" >
+        <action
+            android:id="@+id/action_timeLimits_to_children"
+            app:destination="@id/nav_children" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_permissions"
+        android:name="net.osmank3.labebe.ui.PermissionsFragment"
+        android:label="fragment_permissions"
+        tools:layout="@layout/fragment_permissions" >
+        <action
+            android:id="@+id/action_permissions_to_firstStartFinish"
+            app:destination="@id/nav_firstStartFinish" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_firstStartFinish"
+        android:name="net.osmank3.labebe.ui.FirstStartFinishFragment"
+        android:label="fragment_first_start_finish"
+        tools:layout="@layout/fragment_first_start_finish" >
+        <action
+            android:id="@+id/action_firstStartFinish_to_home"
+            app:destination="@id/nav_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_messages"
+        android:name="net.osmank3.labebe.ui.MessagesFragment"
+        android:label="fragment_messages"
+        tools:layout="@layout/fragment_messages" >
+        <action
+            android:id="@+id/action_messages_to_message"
+            app:destination="@id/nav_message" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_message"
+        android:name="net.osmank3.labebe.ui.MessageFragment"
+        android:label="fragment_message"
+        tools:layout="@layout/fragment_message" />
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="net.osmank3.labebe.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
 </navigation>

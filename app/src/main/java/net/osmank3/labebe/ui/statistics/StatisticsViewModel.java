@@ -6,19 +6,19 @@
  * See the file http://www.gnu.org/copyleft/gpl.txt
  */
 
-package net.osmank3.labebe.ui.slideshow;
+package net.osmank3.labebe.ui.statistics;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SlideshowViewModel extends ViewModel {
+public class StatisticsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public SlideshowViewModel() {
+    public StatisticsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
+        mText.setValue("This is statitstics fragment");
     }
 
     public LiveData<String> getText() {

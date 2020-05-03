@@ -6,19 +6,19 @@
  * See the file http://www.gnu.org/copyleft/gpl.txt
  */
 
-package net.osmank3.labebe.ui.gallery;
+package net.osmank3.labebe.ui.account;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class AccountViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public AccountViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("This is account fragment");
     }
 
     public LiveData<String> getText() {
