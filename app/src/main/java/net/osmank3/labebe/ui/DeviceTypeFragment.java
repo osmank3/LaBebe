@@ -8,6 +8,9 @@
 
 package net.osmank3.labebe.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,59 +18,57 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.chip.Chip;
+
+import net.osmank3.labebe.MainActivity;
 import net.osmank3.labebe.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DeviceTypeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DeviceTypeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public DeviceTypeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DeviceTypeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DeviceTypeFragment newInstance(String param1, String param2) {
-        DeviceTypeFragment fragment = new DeviceTypeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    private View root;
+    private Chip chipParent, chipChildren;
+    private SharedPreferences preferences;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_device_type, container, false);
+        root = inflater.inflate(R.layout.fragment_device_type, container, false);
+
+        initComponent();
+        registerEventHandlers();
+
+        return root;
+    }
+
+    private void initComponent() {
+        chipParent = root.findViewById(R.id.chipParent);
+        chipChildren = root.findViewById(R.id.chipChildren);
+        preferences = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+
+        if (preferences.getBoolean("isDeviceParental", false))
+            chipParent.setChipBackgroundColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+        if (!preferences.getBoolean("isDeviceParental", true))
+            chipChildren.setChipBackgroundColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+    }
+
+    private void registerEventHandlers() {
+        View.OnClickListener chipListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.chipParent) {
+                    chipParent.setChipBackgroundColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+                    chipChildren.setChipBackgroundColor(null);
+                    preferences.edit().putBoolean("isDeviceParental", true).apply();
+                } else {
+                    chipParent.setChipBackgroundColor(null);
+                    chipChildren.setChipBackgroundColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+                    preferences.edit().putBoolean("isDeviceParental", false).apply();
+                }
+                MainActivity.navController.navigate(R.id.action_deviceType_to_appDecisions);
+            }
+        };
+
+        chipParent.setOnClickListener(chipListener);
+        chipChildren.setOnClickListener(chipListener);
     }
 }

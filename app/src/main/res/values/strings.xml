@@ -36,4 +36,8 @@
     <string name="unknown_issue">Unknown issue, please try again!</string>
     <string name="too_many_login_try">Too many unsuccessful login attemps. Please try again later.</string>
     <string name="password_reset_mail_sended">Password reset link sended to your email address. Please fallow that instructions!</string>
+    <string name="children">Children</string>
+    <string name="parent">Parent</string>
+    <string name="device_type_selection">This device used by who?</string>
+    <string name="next_page">Next Page</string>
 </resources>

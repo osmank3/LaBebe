@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020. All rights reserved.
+  ~
+  ~ Author: Osman Karagöz
+  ~ Licensed under the GNU General Public License, version 3.
+  ~ See the file http://www.gnu.org/copyleft/gpl.txt
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".ui.DeviceTypeFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_big"
+        android:text="@string/device_type_selection"
+        android:textAlignment="center"
+        android:textSize="@dimen/big_x2_text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipParent"
+            android:layout_width="@dimen/chip_width"
+            android:layout_height="@dimen/about_logo"
+            android:layout_margin="@dimen/margin_big"
+            android:text="@string/parent"
+            app:chipIcon="@drawable/baseline_supervisor_account_black_24dp"
+            app:chipIconSize="@dimen/about_logo"
+            app:iconEndPadding="@dimen/margin_normal"
+            app:iconStartPadding="@dimen/margin_normal" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipChildren"
+            android:layout_width="@dimen/chip_width"
+            android:layout_height="@dimen/about_logo"
+            android:layout_margin="@dimen/margin_big"
+            android:text="@string/children"
+            app:chipIcon="@drawable/baseline_child_care_black_24dp"
+            app:chipIconSize="@dimen/about_logo"
+            app:iconEndPadding="@dimen/margin_normal"
+            app:iconStartPadding="@dimen/margin_normal" />
+
+    </LinearLayout>
+
+</LinearLayout>
