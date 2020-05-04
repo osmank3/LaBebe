@@ -67,18 +67,6 @@
         <action
             android:id="@+id/action_signUp_to_deviceType"
             app:destination="@id/nav_deviceType" />
-        <action
-            android:id="@+id/action_signUp_to_login"
-            app:destination="@id/nav_login" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_login"
-        android:name="net.osmank3.labebe.ui.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_login_to_deviceType"
-            app:destination="@id/nav_deviceType" />
     </fragment>
     <fragment
         android:id="@+id/nav_deviceType"
