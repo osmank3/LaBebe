@@ -122,8 +122,8 @@ public class SignUpFragment extends Fragment {
 
                             if(user != null) {
                                 SharedPreferences preferences = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
-                                preferences.edit().putString("userEmail", user.getEmail());
-                                preferences.edit().putString("userUid", user.getUid());
+                                preferences.edit().putString("userEmail", user.getEmail()).apply();
+                                preferences.edit().putString("userUid", user.getUid()).apply();
                                 MainActivity.navController.navigate(R.id.action_signUp_to_deviceType);
                             }
                         } else {
@@ -155,8 +155,8 @@ public class SignUpFragment extends Fragment {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if(user != null) {
                                 SharedPreferences preferences = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
-                                preferences.edit().putString("userEmail", user.getEmail());
-                                preferences.edit().putString("userUid", user.getUid());
+                                preferences.edit().putString("userEmail", user.getEmail()).apply();
+                                preferences.edit().putString("userUid", user.getUid()).apply();
                                 MainActivity.navController.navigate(R.id.action_signUp_to_deviceType);
                             }
                         } else {
@@ -209,8 +209,8 @@ public class SignUpFragment extends Fragment {
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     if(user != null) {
                                         SharedPreferences preferences = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
-                                        preferences.edit().putString("userEmail", user.getEmail());
-                                        preferences.edit().putString("userUid", user.getUid());
+                                        preferences.edit().putString("userEmail", user.getEmail()).apply();
+                                        preferences.edit().putString("userUid", user.getUid()).apply();
                                         MainActivity.navController.navigate(R.id.action_signUp_to_deviceType);
                                     }
                                 } else {

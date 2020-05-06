@@ -40,4 +40,5 @@
     <string name="parent">Parent</string>
     <string name="device_type_selection">This device used by who?</string>
     <string name="next_page">Next Page</string>
+    <string name="general_app_decisions">Please select the apps you want to use unlimitedly by everyone</string>
 </resources>
