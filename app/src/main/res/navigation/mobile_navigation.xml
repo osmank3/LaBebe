@@ -59,6 +59,7 @@
             android:id="@+id/action_firstStartWelcome_to_signUp"
             app:destination="@id/nav_signUp" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_signUp"
         android:name="net.osmank3.labebe.ui.SignUpFragment"
@@ -68,20 +69,22 @@
             android:id="@+id/action_signUp_to_deviceType"
             app:destination="@id/nav_deviceType" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_deviceType"
         android:name="net.osmank3.labebe.ui.DeviceTypeFragment"
         android:label="fragment_device_type"
         tools:layout="@layout/fragment_device_type" >
         <action
-            android:id="@+id/action_deviceType_to_appDecisions"
-            app:destination="@id/nav_appDecisions" />
+            android:id="@+id/action_deviceType_to_password"
+            app:destination="@id/nav_password" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_appDecisions"
         android:name="net.osmank3.labebe.ui.AppDecisionsFragment"
         android:label="fragment_app_decisions"
-        tools:layout="@layout/fragment_app_decisions" >
+        tools:layout="@layout/titled_list_view" >
         <action
             android:id="@+id/action_appDecisions_to_children"
             app:destination="@id/nav_children" />
@@ -89,11 +92,12 @@
             android:id="@+id/action_appDecisions_to_timeLimits"
             app:destination="@id/nav_timeLimits" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_children"
         android:name="net.osmank3.labebe.ui.ChildrenFragment"
         android:label="fragment_children"
-        tools:layout="@layout/fragment_children" >
+        tools:layout="@layout/titled_list_view" >
         <action
             android:id="@+id/action_children_to_child"
             app:destination="@id/nav_child" />
@@ -101,6 +105,7 @@
             android:id="@+id/action_children_to_permissions"
             app:destination="@id/nav_permissions" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_child"
         android:name="net.osmank3.labebe.ui.ChildFragment"
@@ -117,6 +122,7 @@
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_timeLimits"
         android:name="net.osmank3.labebe.ui.TimeLimitsFragment"
@@ -126,6 +132,7 @@
             android:id="@+id/action_timeLimits_to_children"
             app:destination="@id/nav_children" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_permissions"
         android:name="net.osmank3.labebe.ui.PermissionsFragment"
@@ -135,15 +142,13 @@
             android:id="@+id/action_permissions_to_firstStartFinish"
             app:destination="@id/nav_firstStartFinish" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_firstStartFinish"
         android:name="net.osmank3.labebe.ui.FirstStartFinishFragment"
         android:label="fragment_first_start_finish"
-        tools:layout="@layout/fragment_first_start_finish" >
-        <action
-            android:id="@+id/action_firstStartFinish_to_home"
-            app:destination="@id/nav_home" />
-    </fragment>
+        tools:layout="@layout/fragment_first_start_finish" />
+
     <fragment
         android:id="@+id/nav_messages"
         android:name="net.osmank3.labebe.ui.MessagesFragment"
@@ -153,14 +158,26 @@
             android:id="@+id/action_messages_to_message"
             app:destination="@id/nav_message" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_message"
         android:name="net.osmank3.labebe.ui.MessageFragment"
         android:label="fragment_message"
         tools:layout="@layout/fragment_message" />
+
     <fragment
         android:id="@+id/nav_about"
         android:name="net.osmank3.labebe.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/nav_password"
+        android:name="net.osmank3.labebe.ui.PasswordFragment"
+        android:label="fragment_password"
+        tools:layout="@layout/password_view" >
+        <action
+            android:id="@+id/action_password_to_appDecisions"
+            app:destination="@id/nav_appDecisions" />
+    </fragment>
 </navigation>

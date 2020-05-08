@@ -36,9 +36,13 @@
     <string name="unknown_issue">Unknown issue, please try again!</string>
     <string name="too_many_login_try">Too many unsuccessful login attemps. Please try again later.</string>
     <string name="password_reset_mail_sended">Password reset link sended to your email address. Please fallow that instructions!</string>
+    <string name="re_password">Re-enter Password</string>
+    <string name="password_mismatch">Password mismatch, please try again!</string>
     <string name="children">Children</string>
     <string name="parent">Parent</string>
     <string name="device_type_selection">This device used by who?</string>
     <string name="next_page">Next Page</string>
     <string name="general_app_decisions">Please select the apps you want to use unlimitedly by everyone</string>
+    <string name="there_is_no_child">There is no children yet. Please add one or more children with using plus button!</string>
+    <string name="set_parent_password">Setting parental access password.\n\nThis password is necessary for change application settings or uninstalling application when you don\'t need anymore.</string>
 </resources>

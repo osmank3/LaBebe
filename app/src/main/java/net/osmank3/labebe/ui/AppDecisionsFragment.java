@@ -18,15 +18,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import net.osmank3.labebe.MainActivity;
 import net.osmank3.labebe.R;
 import net.osmank3.labebe.db.App;
+import net.osmank3.labebe.view.ImageTextSwitchView;
+import net.osmank3.labebe.view.TitledListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +43,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class AppDecisionsFragment extends Fragment {
-    private View root;
-    private TextView textAppDecisions;
-    private Button btnNextPage;
-    private LinearLayout appDecisionsList;
+    private TitledListView listView;
     private String child;
 
     private FirebaseFirestore database;
@@ -58,12 +51,12 @@ public class AppDecisionsFragment extends Fragment {
     private PackageManager pm;
     private HashMap<String, App> apps;
     private List<String> generallyAllows;
+    private HashMap<String, Object> dbDocumentPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        root = inflater.inflate(R.layout.fragment_app_decisions, container, false);
+        listView = new TitledListView(getContext());
         if (getArguments() != null) {
             child = getArguments().getString("child");
         }
@@ -72,17 +65,39 @@ public class AppDecisionsFragment extends Fragment {
         registerEventHandlers();
         fillAppDecisionList();
 
-        return root;
+        return listView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (child == null) {
+            HashMap<String, Object> data;
+            if (dbDocumentPreferences != null)
+                data = dbDocumentPreferences;
+            else
+                data = new HashMap<>();
+            data.put("allowedApps", generallyAllows);
+            database.collection("users")
+                    .document(preferences.getString("userUid", ""))
+                    .set(data)
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("LaBebeAppDecisions", "Error adding document", e);
+                        }
+                    });
+        } else {
+
+        }
     }
 
     private void initComponents() {
-        textAppDecisions = root.findViewById(R.id.textAppDecisions);
-        btnNextPage = root.findViewById(R.id.btnNextPage);
-        appDecisionsList = root.findViewById(R.id.appDecisionsList);
         preferences = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), MODE_PRIVATE);
         database = FirebaseFirestore.getInstance();
         pm = getActivity().getPackageManager();
         generallyAllows = new ArrayList<>();
+
 
         database.collection("users").document(preferences.getString("userUid", ""))
                 .get()
@@ -92,44 +107,41 @@ public class AppDecisionsFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                generallyAllows = (List<String>) document.get("allowedApps");
-                                fillAppDecisionList();
+                                dbDocumentPreferences = (HashMap<String, Object>) document.getData();
+                                setVariables();
                             }
                         }
                     }
                 });
 
         if (preferences.getBoolean("isFirstStart", true)) {
-            textAppDecisions.setVisibility(View.VISIBLE);
-            btnNextPage.setVisibility(View.VISIBLE);
+            listView.showButton(true);
         } else {
-            textAppDecisions.setVisibility(View.GONE);
-            btnNextPage.setVisibility(View.GONE);
+            listView.showButton(false);
+        }
+        listView.setTitle(R.string.general_app_decisions);
+    }
+
+    private void setVariables() {
+        if (dbDocumentPreferences != null) {
+            if (dbDocumentPreferences.containsKey("allowedApps")) {
+                generallyAllows = (List<String>) dbDocumentPreferences.get("allowedApps");
+                fillAppDecisionList();
+            }
         }
     }
 
     private void registerEventHandlers() {
-        btnNextPage.setOnClickListener(new View.OnClickListener() {
+        listView.setOnButtonClick(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, List<String>> data = new HashMap<>();
-                data.put("allowedApps", generallyAllows);
-                database.collection("users")
-                            .document(preferences.getString("userUid",""))
-                            .set(data)
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("LaBebeAppDecisions", "Error adding document", e);
-                                }
-                            });
                 MainActivity.navController.navigate(R.id.action_appDecisions_to_children);
             }
         });
     }
 
     private void fillAppDecisionList() {
-        appDecisionsList.removeAllViews();
+        listView.clearList();
         if (child == null) {
             if (preferences.getBoolean("isFirstStart", true)) {
                 PackageManager pm = getActivity().getPackageManager();
@@ -157,6 +169,7 @@ public class AppDecisionsFragment extends Fragment {
                     apps.get(resolveInfo.activityInfo.packageName).setType("Home");
                 }
 
+                //TODO this database process must send background
                 for (App app : apps.values()) {
                     database.collection("applications")
                             .document(app.getId())
@@ -173,18 +186,15 @@ public class AppDecisionsFragment extends Fragment {
             Intent pmIntent = new Intent(Intent.ACTION_MAIN);
             pmIntent.addCategory(Intent.CATEGORY_LAUNCHER);
             for (final ResolveInfo resolveInfo: pm.queryIntentActivities(pmIntent, 0)) {
-                ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.app_switch_layout, null);
-                ImageView appImage = cl.findViewById(R.id.imageApp);
-                TextView appNameView = cl.findViewById(R.id.textApp);
-                Switch appSwitch = cl.findViewById(R.id.switchApp);
+                ImageTextSwitchView line = new ImageTextSwitchView(getContext());
                 try {
-                    appImage.setImageDrawable(pm.getApplicationIcon(resolveInfo.activityInfo.packageName));
+                    line.setImage(pm.getApplicationIcon(resolveInfo.activityInfo.packageName));
                 } catch (PackageManager.NameNotFoundException e) {
 
                 }
-                appNameView.setText(resolveInfo.activityInfo.loadLabel(pm).toString());
-                appSwitch.setChecked(generallyAllows.contains(resolveInfo.activityInfo.name));
-                appSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                line.setText(resolveInfo.activityInfo.loadLabel(pm).toString());
+                line.checkSwitchOn(generallyAllows.contains(resolveInfo.activityInfo.name));
+                line.setOnChangeSwitch(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
@@ -194,7 +204,7 @@ public class AppDecisionsFragment extends Fragment {
                         }
                     }
                 });
-                appDecisionsList.addView(cl);
+                listView.addToList(line);
             }
         } else {
            //TODO child config, allowed-blocked

@@ -14,7 +14,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageApp"
+        android:id="@+id/image"
         android:layout_width="@dimen/app_list_logo"
         android:layout_height="@dimen/app_list_logo"
         android:layout_margin="@dimen/margin_normal"
@@ -24,22 +24,22 @@
         app:srcCompat="@android:mipmap/sym_def_app_icon" />
 
     <TextView
-        android:id="@+id/textApp"
+        android:id="@+id/text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_normal"
-        app:layout_constraintBottom_toBottomOf="@+id/imageApp"
-        app:layout_constraintEnd_toStartOf="@+id/switchApp"
-        app:layout_constraintStart_toEndOf="@+id/imageApp"
-        app:layout_constraintTop_toTopOf="@+id/imageApp" />
+        app:layout_constraintBottom_toBottomOf="@+id/image"
+        app:layout_constraintEnd_toStartOf="@+id/checkSwitch"
+        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintTop_toTopOf="@+id/image" />
 
     <Switch
-        android:id="@+id/switchApp"
+        android:id="@+id/checkSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_normal"
-        app:layout_constraintBottom_toBottomOf="@+id/textApp"
+        app:layout_constraintBottom_toBottomOf="@+id/text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textApp" />
+        app:layout_constraintTop_toTopOf="@+id/text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

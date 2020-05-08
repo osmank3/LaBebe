@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020. All rights reserved.
+  ~
+  ~ Author: Osman Karagöz
+  ~ Licensed under the GNU General Public License, version 3.
+  ~ See the file http://www.gnu.org/copyleft/gpl.txt
+  -->
+
+<resources>
+    <declare-styleable name="TitledListView">
+        <attr name="title" format="string" />
+        <attr name="buttonStatus" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="ImageTextSwitchView">
+        <attr name="text" format="string" />
+        <attr name="image" format="reference" />
+        <attr name="status" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="ImageTextView">
+        <attr name="text1" format="string" />
+        <attr name="image1" format="reference" />
+    </declare-styleable>
+</resources>

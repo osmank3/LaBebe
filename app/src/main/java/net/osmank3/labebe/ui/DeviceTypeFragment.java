@@ -64,7 +64,7 @@ public class DeviceTypeFragment extends Fragment {
                     chipChildren.setChipBackgroundColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
                     preferences.edit().putBoolean("isDeviceParental", false).apply();
                 }
-                MainActivity.navController.navigate(R.id.action_deviceType_to_appDecisions);
+                MainActivity.navController.navigate(R.id.action_deviceType_to_password);
             }
         };
 
