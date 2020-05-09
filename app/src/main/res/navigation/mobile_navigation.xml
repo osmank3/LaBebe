@@ -117,10 +117,6 @@
         <action
             android:id="@+id/action_child_to_timeLimits"
             app:destination="@id/nav_timeLimits" />
-        <argument
-            android:name="childId"
-            app:argType="integer"
-            android:defaultValue="0" />
     </fragment>
 
     <fragment

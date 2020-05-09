@@ -9,6 +9,7 @@
 package net.osmank3.labebe.view;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -82,7 +83,7 @@ public class ImageTextView extends ConstraintLayout implements View.OnClickListe
     }
 
     public void setImageColor(int color) {
-        imageView.setBackgroundColor(color);
+        imageView.setImageTintList(ColorStateList.valueOf(color));
     }
 
     @Override

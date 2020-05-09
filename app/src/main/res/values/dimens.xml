@@ -17,6 +17,7 @@
     <dimen name="about_logo_margin">24dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_big">24dp</dimen>
+    <dimen name="text">16sp</dimen>
     <dimen name="big_text">18sp</dimen>
     <dimen name="big_x2_text">36sp</dimen>
     <dimen name="chip_width">300dp</dimen>

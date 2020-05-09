@@ -59,6 +59,13 @@ public class ChildrenFragment extends Fragment {
         database = FirebaseFirestore.getInstance();
         children = new HashMap<>();
 
+        listView.setTitle(null);
+        if (preferences.getBoolean("isFirstStart", true)) {
+            listView.showButton(true);
+        } else {
+            listView.showButton(false);
+        }
+
         database.collection("users").document(preferences.getString("userUid", ""))
                 .collection("children")
                 .get()
@@ -68,7 +75,8 @@ public class ChildrenFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document: task.getResult()) {
                                 Child child = document.toObject(Child.class);
-                                children.put(child.getName(), child);
+                                child.setId(document.getId());
+                                children.put(child.getId(), child);
                             }
                             fillChildrenList();
                         }
@@ -90,19 +98,25 @@ public class ChildrenFragment extends Fragment {
         if (children.size() == 0) {
             TextView textView = new TextView(getContext());
             textView.setText(R.string.there_is_no_child);
-            textView.setTextSize(getResources().getDimension(R.dimen.big_text));
+            textView.setTextSize(getResources().getDimension(R.dimen.text));
+            textView.setPadding(
+                    (int) getResources().getDimension(R.dimen.margin_normal),
+                    (int) getResources().getDimension(R.dimen.margin_normal),
+                    (int) getResources().getDimension(R.dimen.margin_normal),
+                    (int) getResources().getDimension(R.dimen.margin_normal)
+                    );
             textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             listView.addToList(textView);
         } else {
             for (final Child child : children.values()) {
                 ImageTextView line = new ImageTextView(getContext());
                 line.setText(child.getName());
-                line.setImageColor(child.getColor().hashCode());//TODO this is not color, this line will change
+                line.setImageColor(child.getColor());
                 line.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Bundle args = new Bundle();
-                        args.putString("child", child.getId());
+                        args.putSerializable("child", child);
                         MainActivity.navController.navigate(R.id.action_children_to_child, args);
                     }
                 });

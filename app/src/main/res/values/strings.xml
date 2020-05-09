@@ -20,12 +20,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="welcome">Welcome to LaBebe parental control application!\n\nThis application protects your child from blocked applications and limiting time for using this device.\n\nFirst of all this application needs some settings and permissions.\n\nLets do some settings, press bellowing button...</string>
+    <string name="welcome">Welcome to LaBebe parental control application!\n\nThis application protects your child from blocked applications and limiting time for using this device.\n\nFirst of all this application needs some settings and permissions.\n\nLets do some settings, press bellowing button…</string>
     <string name="start_first_install">Start Installing</string>
     <string name="or">OR</string>
     <string name="forgottenPassword">Did you forget your password?</string>
     <string name="login">Login</string>
-    <string name="signup">Sign Up</string>
+    <string name="sign_up">Sign Up</string>
     <string name="password">Password</string>
     <string name="email">E-mail</string>
     <string name="email_required">Email address is required!</string>
@@ -34,15 +34,29 @@
     <string name="user_not_found">User Not Found</string>
     <string name="password_incorrect">Password is incorrect, please try again!</string>
     <string name="unknown_issue">Unknown issue, please try again!</string>
-    <string name="too_many_login_try">Too many unsuccessful login attemps. Please try again later.</string>
-    <string name="password_reset_mail_sended">Password reset link sended to your email address. Please fallow that instructions!</string>
+    <string name="too_many_login_try">Too many unsuccessful login attempts. Please try again later.</string>
+    <string name="password_reset_mail_sent">Password reset link sent to your email address. Please fallow that instructions!</string>
     <string name="re_password">Re-enter Password</string>
     <string name="password_mismatch">Password mismatch, please try again!</string>
     <string name="children">Children</string>
     <string name="parent">Parent</string>
     <string name="device_type_selection">This device used by who?</string>
     <string name="next_page">Next Page</string>
-    <string name="general_app_decisions">Please select the apps you want to use unlimitedly by everyone</string>
+    <string name="general_app_decisions">Please select the apps you want to use unlimited by everyone</string>
+    <string name="child_app_decisions">Please select the apps you want to usable by child</string>
     <string name="there_is_no_child">There is no children yet. Please add one or more children with using plus button!</string>
     <string name="set_parent_password">Setting parental access password.\n\nThis password is necessary for change application settings or uninstalling application when you don\'t need anymore.</string>
+    <string name="name">Name</string>
+    <string name="born">Born Year</string>
+    <string name="app_decisions">App Decisions</string>
+    <string name="time_limitations">Time Limitation</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="color">Color</string>
+    <string name="pick_color">Pick a color</string>
+    <string name="password_reset">Password reset is successful. On first access new password will installed.</string>
+    <string name="field_required">This field is required</string>
+    <string name="delete">Delete</string>
+    <string name="girl">Girl</string>
+    <string name="boy">Boy</string>
+    <string name="are_you_sure_to_delete">Are you sure to delete child?</string>
 </resources>

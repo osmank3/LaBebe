@@ -62,7 +62,7 @@ public class TitledListView extends ConstraintLayout {
             text = typedArray.getString(R.styleable.TitledListView_title);
             buttonStatus = typedArray.getBoolean(R.styleable.TitledListView_buttonStatus, false);
 
-            title.setText(text);
+            setTitle(text);
             showButton(buttonStatus);
         } else {
             return;
@@ -72,11 +72,17 @@ public class TitledListView extends ConstraintLayout {
     }
 
     public void setTitle(String text) {
-        title.setText(text);
+        if (text == null) {
+            title.setVisibility(GONE);
+        } else {
+            title.setText(text);
+            title.setVisibility(VISIBLE);
+        }
     }
 
     public void setTitle(int resid) {
         title.setText(resid);
+        title.setVisibility(VISIBLE);
     }
 
     public void addToList(View view) {

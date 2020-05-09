@@ -173,7 +173,7 @@ public class SignUpFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
-                            Snackbar.make(root, R.string.password_reset_mail_sended, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(root, R.string.password_reset_mail_sent, Snackbar.LENGTH_LONG).show();
                         else {
                             Log.w(getClass().toString(), "Unknown Issue: " + task.getException());
                             Snackbar.make(root, R.string.unknown_issue, Snackbar.LENGTH_LONG).show();
