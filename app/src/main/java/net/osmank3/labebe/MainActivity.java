@@ -26,16 +26,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private FloatingActionButton fab;
     public static NavController navController;
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -54,35 +51,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerEventHandlers() {
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (navController.getCurrentDestination().getId() == R.id.nav_children) {
-                    navController.navigate(R.id.action_children_to_child);
-                } else {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            }
-        });
-
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
                 switch (destination.getId()) {
-                    case R.id.nav_children:
-                    case R.id.nav_messages:
-                    case R.id.nav_timeLimits:
-                        fab.setVisibility(View.VISIBLE);
-                        break;
                     case R.id.nav_home:
                         if (preferences.getBoolean("isFirstStart", true)) {
                             navController.navigate(R.id.action_home_to_firstStartWelcome);
                         }
                     default:
-                        fab.setVisibility(View.GONE);
                         break;
                 }
                 if (preferences.getBoolean("isFirstStart", true)) {
@@ -99,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
     private void initComponents() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fab = findViewById(R.id.fab);
         preferences = getSharedPreferences(getResources().getString(R.string.app_name), MODE_PRIVATE);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);

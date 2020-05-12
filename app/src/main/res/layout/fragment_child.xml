@@ -92,7 +92,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:gravity="center"
             android:text="@string/girl"
             android:textSize="@dimen/big_text" />
 
@@ -101,7 +100,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:gravity="center"
             android:text="@string/boy"
             android:textSize="@dimen/big_text" />
     </com.google.android.material.chip.ChipGroup>

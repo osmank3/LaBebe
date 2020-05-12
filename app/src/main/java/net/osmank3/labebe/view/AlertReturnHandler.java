@@ -8,6 +8,7 @@
 
 package net.osmank3.labebe.view;
 
-public interface PasswordReturnHandler {
-    void onPasswordFilled(String passwordHash);
+public interface AlertReturnHandler {
+    void onAlertSuccess(Object object);
+    void onAlertFunction(Object object);
 }

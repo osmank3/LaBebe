@@ -59,4 +59,23 @@
     <string name="girl">Girl</string>
     <string name="boy">Boy</string>
     <string name="are_you_sure_to_delete">Are you sure to delete child?</string>
+    <string name="daily">Daily</string>
+    <string name="time_limit_type">Time Limit Type</string>
+    <string name="limited_hours">Limited Hours</string>
+    <string name="daily_time_limits">Daily Time Limit</string>
+    <string name="app_time_limit">App Time Limit</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="start_time">Start</string>
+    <string name="end_time">End</string>
+    <string name="duration">Duration</string>
+    <string name="choose_app">Choose App</string>
+    <string name="new_time_limit">New Time Limit</string>
+    <string name="cannot_save_limitation">Limitation can not saved. Next time fill all fields.</string>
+    <string name="child_time_limitations">Please add time limitations to allow your child access applications</string>
 </resources>

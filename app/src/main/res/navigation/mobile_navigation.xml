@@ -117,13 +117,17 @@
         <action
             android:id="@+id/action_child_to_timeLimits"
             app:destination="@id/nav_timeLimits" />
+        <argument
+            android:name="childId"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_timeLimits"
         android:name="net.osmank3.labebe.ui.TimeLimitsFragment"
         android:label="fragment_time_limits"
-        tools:layout="@layout/fragment_time_limits" >
+        tools:layout="@layout/titled_list_view" >
         <action
             android:id="@+id/action_timeLimits_to_children"
             app:destination="@id/nav_children" />

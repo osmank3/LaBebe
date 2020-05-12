@@ -118,9 +118,10 @@ public class AppDecisionsFragment extends Fragment {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 List<String> apps = (List<String>) document.get("allowedApps");
-                                if (apps != null)
+                                if (apps != null) {
                                     generallyAllows = apps;
                                     fillAppDecisionList();
+                                }
                             }
                         }
                     }
@@ -146,9 +147,10 @@ public class AppDecisionsFragment extends Fragment {
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
                                     List<String> apps = (List<String>) document.get("allowedApps");
-                                    if (apps != null)
+                                    if (apps != null) {
                                         childAllows = apps;
                                         fillAppDecisionList();
+                                    }
                                 }
                             }
                         }
@@ -226,14 +228,14 @@ public class AppDecisionsFragment extends Fragment {
 
                 }
                 line.setText(resolveInfo.activityInfo.loadLabel(pm).toString());
-                line.checkSwitchOn(generallyAllows.contains(resolveInfo.activityInfo.name));
+                line.checkSwitchOn(generallyAllows.contains(resolveInfo.activityInfo.packageName));
                 line.setOnChangeSwitch(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
-                            generallyAllows.add(resolveInfo.activityInfo.name);
+                            generallyAllows.add(resolveInfo.activityInfo.packageName);
                         } else {
-                            generallyAllows.remove(resolveInfo.activityInfo.name);
+                            generallyAllows.remove(resolveInfo.activityInfo.packageName);
                         }
                     }
                 });
@@ -243,7 +245,7 @@ public class AppDecisionsFragment extends Fragment {
             Intent pmIntent = new Intent(Intent.ACTION_MAIN);
             pmIntent.addCategory(Intent.CATEGORY_LAUNCHER);
             for (final ResolveInfo resolveInfo: pm.queryIntentActivities(pmIntent, 0)) {
-                if (generallyAllows.contains(resolveInfo.activityInfo.name)) {
+                if (generallyAllows.contains(resolveInfo.activityInfo.packageName)) {
                     continue;
                 }
                 ImageTextSwitchView line = new ImageTextSwitchView(getContext());
@@ -253,14 +255,14 @@ public class AppDecisionsFragment extends Fragment {
 
                 }
                 line.setText(resolveInfo.activityInfo.loadLabel(pm).toString());
-                line.checkSwitchOn(childAllows.contains(resolveInfo.activityInfo.name));
+                line.checkSwitchOn(childAllows.contains(resolveInfo.activityInfo.packageName));
                 line.setOnChangeSwitch(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
-                            childAllows.add(resolveInfo.activityInfo.name);
+                            childAllows.add(resolveInfo.activityInfo.packageName);
                         } else {
-                            childAllows.remove(resolveInfo.activityInfo.name);
+                            childAllows.remove(resolveInfo.activityInfo.packageName);
                         }
                     }
                 });

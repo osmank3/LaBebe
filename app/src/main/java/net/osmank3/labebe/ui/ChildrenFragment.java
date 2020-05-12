@@ -91,6 +91,12 @@ public class ChildrenFragment extends Fragment {
                 MainActivity.navController.navigate(R.id.action_children_to_permissions);
             }
         });
+        listView.setOnFabClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.navController.navigate(R.id.action_children_to_child);
+            }
+        });
     }
 
     private void fillChildrenList() {

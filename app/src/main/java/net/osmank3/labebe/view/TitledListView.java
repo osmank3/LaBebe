@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import net.osmank3.labebe.R;
 
 public class TitledListView extends ConstraintLayout {
@@ -27,6 +29,7 @@ public class TitledListView extends ConstraintLayout {
     private Button button;
     private LinearLayout list;
     private ScrollView scroll;
+    private FloatingActionButton fab;
 
     public TitledListView(Context context) {
         super(context);
@@ -54,6 +57,7 @@ public class TitledListView extends ConstraintLayout {
         button = findViewById(R.id.button);
         list = findViewById(R.id.list);
         scroll = findViewById(R.id.scroll);
+        fab = findViewById(R.id.fab);
 
 
         if (attrs != null) {
@@ -96,6 +100,15 @@ public class TitledListView extends ConstraintLayout {
 
     public void setOnButtonClick(View.OnClickListener listener) {
         button.setOnClickListener(listener);
+    }
+
+    public void setOnFabClick(View.OnClickListener listener) {
+        if (listener != null) {
+            fab.setVisibility(VISIBLE);
+            fab.setOnClickListener(listener);
+        } else {
+            fab.setVisibility(GONE);
+        }
     }
 
     public void showButton(Boolean status){
