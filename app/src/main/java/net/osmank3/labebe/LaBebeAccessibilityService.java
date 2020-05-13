@@ -12,7 +12,13 @@ import android.accessibilityservice.AccessibilityService;
 import android.view.accessibility.AccessibilityEvent;
 
 public class LaBebeAccessibilityService extends AccessibilityService {
+    public static LaBebeAccessibilityService instance;
     public LaBebeAccessibilityService() {
+    }
+
+    @Override
+    public void onServiceConnected() {
+        instance = this;
     }
 
     @Override

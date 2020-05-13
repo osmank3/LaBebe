@@ -8,67 +8,113 @@
 
 package net.osmank3.labebe.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import net.osmank3.labebe.LaBebeAccessibilityService;
+import net.osmank3.labebe.MainActivity;
 import net.osmank3.labebe.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PermissionsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PermissionsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public PermissionsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PermissionsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PermissionsFragment newInstance(String param1, String param2) {
-        PermissionsFragment fragment = new PermissionsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private View root;
+    private TextView textPermissions;
+    private LinearLayout llAppOverlay, llAccessibility;
+    private CheckBox cbAppOverlay, cbAccessibility;
+    private Button btnPermission;
+    private SharedPreferences preferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_permissions, container, false);
+        root = inflater.inflate(R.layout.fragment_permissions, container, false);
+
+        initComponents();
+        registerEventHandlers();
+
+        return root;
+    }
+
+    private void initComponents() {
+        textPermissions = root.findViewById(R.id.textPermissions);
+        llAppOverlay = root.findViewById(R.id.llAppOverlay);
+        llAccessibility = root.findViewById(R.id.llAccessibility);
+        cbAppOverlay = root.findViewById(R.id.cbAppOverlay);
+        cbAccessibility = root.findViewById(R.id.cbAccessibility);
+        btnPermission = root.findViewById(R.id.btnPermission);
+        preferences = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+
+        if (preferences.getBoolean("isDeviceParental", false)) {
+            textPermissions.setText(textPermissions.getText().toString().concat(getResources().getText(R.string.permission_on_parental_device).toString()));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            cbAppOverlay.setChecked(Settings.canDrawOverlays(getContext()));
+        }
+        else {
+            cbAppOverlay.setChecked(true);
+        }
+        cbAccessibility.setChecked(LaBebeAccessibilityService.instance != null);
+        if (preferences.getBoolean("isDeviceParental", false) || (cbAccessibility.isChecked() && cbAppOverlay.isChecked()))
+            btnPermission.setEnabled(true);
+        else
+            btnPermission.setEnabled(false);
+    }
+
+    private void registerEventHandlers() {
+        llAppOverlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (!Settings.canDrawOverlays(getContext())) {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
+                        startActivityForResult(intent, 1);
+                    }
+                }
+            }
+        });
+
+        llAccessibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (LaBebeAccessibilityService.instance == null) {
+                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    startActivityForResult(intent, 2);
+                }
+            }
+        });
+
+        btnPermission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.navController.navigate(R.id.action_permissions_to_firstStartFinish);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            cbAppOverlay.setChecked(Settings.canDrawOverlays(getContext()));
+        cbAccessibility.setChecked(LaBebeAccessibilityService.instance != null);
+        if (preferences.getBoolean("isDeviceParental", false) || (cbAccessibility.isChecked() && cbAppOverlay.isChecked()))
+            btnPermission.setEnabled(true);
+        else
+            btnPermission.setEnabled(false);
     }
 }

@@ -78,4 +78,10 @@
     <string name="new_time_limit">New Time Limit</string>
     <string name="cannot_save_limitation">Limitation can not saved. Next time fill all fields.</string>
     <string name="child_time_limitations">Please add time limitations to allow your child access applications</string>
+    <string name="set_application_permissions_first_time">This application needs some permissions and accessibility service which listed below for working correctly.</string>
+    <string name="permission_application_overlay">This permission will be used to alert the user when attempting to open blocked apps</string>
+    <string name="permission_application_overlay_checkbox">Allow show on top of applications</string>
+    <string name="permission_accessibility_service_checkbox">Start LaBebe accessibility service</string>
+    <string name="permission_accessibility_service">This service keeps track of how much user uses which app and prevents it from opening a blocked app.</string>
+    <string name="permission_on_parental_device">\n\nThese settings are no longer required for parental devices.\nHowever, when you want to lend your device to children, you can grant these permissions.</string>
 </resources>
