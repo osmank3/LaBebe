@@ -84,4 +84,6 @@
     <string name="permission_accessibility_service_checkbox">Start LaBebe accessibility service</string>
     <string name="permission_accessibility_service">This service keeps track of how much user uses which app and prevents it from opening a blocked app.</string>
     <string name="permission_on_parental_device">\n\nThese settings are no longer required for parental devices.\nHowever, when you want to lend your device to children, you can grant these permissions.</string>
+    <string name="finish_first_install">Complete Installing</string>
+    <string name="finish">Congratulations!\n\nFirst Installing is finished.\n\nIf you want to change any of these settings or sending message to your children, you can use this application later.\n\nPlease do not forget and do not share your parental password.\n\nCreated children accounts password will set on first access by your children</string>
 </resources>
