@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import net.osmank3.labebe.MainActivity;
 import net.osmank3.labebe.R;
@@ -103,6 +104,7 @@ public class PasswordFragment extends Fragment implements PasswordReturnHandler 
             passwordView.setTextPassword(R.string.re_password);
         } else if (hashedFromDB) {
             if (hashedPassword.equals(passwordHash)) {
+                preferences.edit().putString("parent_password_hash", hashedPassword).apply();
                 passwordView.setStatusReset();
                 MainActivity.navController.navigate(R.id.action_password_to_appDecisions);
             } else {
@@ -112,15 +114,11 @@ public class PasswordFragment extends Fragment implements PasswordReturnHandler 
         } else {
             if (hashedPassword.equals(passwordHash)) {
                 preferences.edit().putString("parent_password_hash", hashedPassword).apply();
-                HashMap<String, Object> data;
-                if (dbDocumentPreferences != null)
-                    data = dbDocumentPreferences;
-                else
-                    data = new HashMap<>();
+                HashMap<String, Object> data = new HashMap<>();
                 data.put("parent_password_hash", hashedPassword);
                 database.collection("users")
                         .document(preferences.getString("userUid", ""))
-                        .set(data)
+                        .set(data, SetOptions.merge())
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
