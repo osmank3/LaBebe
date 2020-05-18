@@ -89,4 +89,5 @@
     <string name="select_for_login">Select for Login</string>
     <string name="about_text">LaBebe - Parental Management Application\n\nLicensed under GPL v3\n\nOsman Karagöz [osmank3 [at] gmail.com], 2020</string>
     <string name="menu_about">About</string>
+    <string name="you_can_not_use">You can not use this application, because your parent do not allow to you use it.</string>
 </resources>

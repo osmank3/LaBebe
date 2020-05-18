@@ -77,6 +77,7 @@
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGender"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_normal"
@@ -89,6 +90,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipGirl"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
@@ -97,6 +99,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipBoy"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"

@@ -11,10 +11,14 @@ package net.osmank3.labebe.view.carousel;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,6 +27,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import net.osmank3.labebe.LaBebeAccessibilityService;
 import net.osmank3.labebe.MainActivity;
 import net.osmank3.labebe.R;
 import net.osmank3.labebe.db.Child;
@@ -42,6 +47,7 @@ public class CarouselItem implements PasswordReturnHandler {
     private PasswordView passwordView;
     private Boolean isNewPassword = false;
     private Integer alertCounter = 3;
+    private Boolean isAccessibilityServiceRequest = false;
     private FirebaseFirestore database;
     private SharedPreferences preferences;
 
@@ -61,6 +67,21 @@ public class CarouselItem implements PasswordReturnHandler {
         setChild(child);
     }
 
+    public CarouselItem(Context context, Boolean isAccessibilityServiceRequest) {
+        this(context);
+        setAccessibilityServiceAction(isAccessibilityServiceRequest);
+    }
+
+    public CarouselItem(Context context, Child child, Boolean isAccessibilityServiceRequest) {
+        this(context);
+        setChild(child);
+        setAccessibilityServiceAction(isAccessibilityServiceRequest);
+    }
+
+    public void setAccessibilityServiceAction(Boolean status) {
+        isAccessibilityServiceRequest = status;
+    }
+
     public void setChild(Child child) {
         this.child = child;
         hashedPassword = child.getPasswordHash();
@@ -75,11 +96,16 @@ public class CarouselItem implements PasswordReturnHandler {
     public Integer getColor() {return color;}
 
     public void performClick() {
-        passwordView = new PasswordView(context, this);
+        ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(context, R.style.AppTheme_Alert);
+        passwordView = new PasswordView(contextThemeWrapper, this);
         passwordView.setTitle(null);
-        passwordAlert = new AlertDialog.Builder(context)
+        passwordAlert = new AlertDialog.Builder(contextThemeWrapper)
                 .setView(passwordView)
                 .create();
+        if (isAccessibilityServiceRequest) {
+            int alertType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_PHONE;
+            passwordAlert.getWindow().setType(alertType);
+        }
         passwordAlert.show();
     }
 
@@ -108,9 +134,9 @@ public class CarouselItem implements PasswordReturnHandler {
 
                     Bundle args = new Bundle();
                     args.putSerializable("child", child);
-                    MainActivity.navController.navigate(R.id.action_home_to_account, args);
+                    doAction(args);
                 } else {
-                    MainActivity.navController.navigate(R.id.action_home_to_account);
+                    doAction(null);
                 }
             } else {
                 alertCounter--;
@@ -123,6 +149,14 @@ public class CarouselItem implements PasswordReturnHandler {
                 passwordView.setStatusReset();
                 Snackbar.make(passwordView, R.string.password_incorrect, BaseTransientBottomBar.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private void doAction(@Nullable Bundle args) {
+        if (!isAccessibilityServiceRequest)
+            MainActivity.navController.navigate(R.id.action_home_to_account, args);
+        else {
+            LaBebeAccessibilityService.instance.doAction(child);
         }
     }
 }
