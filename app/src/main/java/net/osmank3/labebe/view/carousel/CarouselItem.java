@@ -118,20 +118,21 @@ public class CarouselItem implements PasswordReturnHandler {
         } else {
             if (hashedPassword.equals(passwordHash)) {
                 passwordAlert.dismiss();
-                if (child != null && isNewPassword) {
-                    child.setPasswordHash(passwordHash);
-                    database.collection("users")
-                            .document(preferences.getString("userUid", ""))
-                            .collection("children")
-                            .document(child.getId())
-                            .set(child, SetOptions.merge())
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("LaBebePasswordFragment", "Error adding document", e);
-                                }
-                            });
-
+                if (child != null) {
+                    if (isNewPassword) {
+                        child.setPasswordHash(passwordHash);
+                        database.collection("users")
+                                .document(preferences.getString("userUid", ""))
+                                .collection("children")
+                                .document(child.getId())
+                                .set(child, SetOptions.merge())
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("LaBebePasswordFragment", "Error adding document", e);
+                                    }
+                                });
+                    }
                     Bundle args = new Bundle();
                     args.putSerializable("child", child);
                     doAction(args);

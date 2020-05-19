@@ -69,7 +69,7 @@ public class PermissionsFragment extends Fragment {
             cbAppOverlay.setChecked(true);
         }
         cbAccessibility.setChecked(LaBebeAccessibilityService.instance != null);
-        if (preferences.getBoolean("isDeviceParental", false) || (cbAccessibility.isChecked() && cbAppOverlay.isChecked()))
+        if ((preferences.getBoolean("isDeviceParental", false) && preferences.getBoolean("isFirstStart", true)) || (cbAccessibility.isChecked() && cbAppOverlay.isChecked()))
             btnPermission.setEnabled(true);
         else
             btnPermission.setEnabled(false);
@@ -101,7 +101,12 @@ public class PermissionsFragment extends Fragment {
         btnPermission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.navController.navigate(R.id.action_permissions_to_firstStartFinish);
+                if (preferences.getBoolean("isFirstStart", true)) {
+                    MainActivity.navController.navigate(R.id.action_permissions_to_firstStartFinish);
+                } else {
+                    preferences.edit().putBoolean("isLent", true).apply();
+                    MainActivity.navController.navigate(R.id.action_permissions_to_account);
+                }
             }
         });
     }

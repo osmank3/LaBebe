@@ -31,7 +31,8 @@
 
     <fragment
         android:id="@+id/nav_account"
-        android:name="net.osmank3.labebe.ui.account.AccountFragment"
+        android:name="net.osmank3.labebe.ui.AccountFragment"
+        android:label="@string/menu_account"
         tools:layout="@layout/fragment_account">
         <action
             android:id="@+id/action_account_to_children"
@@ -40,8 +41,14 @@
             android:id="@+id/action_account_to_messages"
             app:destination="@id/nav_messages" />
         <action
-            android:id="@+id/action_account_to_slideshow"
+            android:id="@+id/action_account_to_statistics"
             app:destination="@id/nav_statistics" />
+        <action
+            android:id="@+id/action_account_to_appDecisions"
+            app:destination="@id/nav_appDecisions" />
+        <action
+            android:id="@+id/action_account_to_permissions"
+            app:destination="@id/nav_permissions" />
     </fragment>
 
     <fragment
@@ -82,8 +89,8 @@
     <fragment
         android:id="@+id/nav_appDecisions"
         android:name="net.osmank3.labebe.ui.AppDecisionsFragment"
-        android:label="fragment_app_decisions"
-        tools:layout="@layout/titled_list_view" >
+        android:label="@string/app_decisions"
+        tools:layout="@layout/titled_list_view">
         <action
             android:id="@+id/action_appDecisions_to_children"
             app:destination="@id/nav_children" />
@@ -95,8 +102,8 @@
     <fragment
         android:id="@+id/nav_children"
         android:name="net.osmank3.labebe.ui.ChildrenFragment"
-        android:label="fragment_children"
-        tools:layout="@layout/titled_list_view" >
+        android:label="@string/children"
+        tools:layout="@layout/titled_list_view">
         <action
             android:id="@+id/action_children_to_child"
             app:destination="@id/nav_child" />
@@ -108,8 +115,8 @@
     <fragment
         android:id="@+id/nav_child"
         android:name="net.osmank3.labebe.ui.ChildFragment"
-        android:label="fragment_child"
-        tools:layout="@layout/fragment_child" >
+        android:label="@string/child"
+        tools:layout="@layout/fragment_child">
         <action
             android:id="@+id/action_child_to_appDecisions"
             app:destination="@id/nav_appDecisions" />
@@ -118,15 +125,15 @@
             app:destination="@id/nav_timeLimits" />
         <argument
             android:name="childId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_timeLimits"
         android:name="net.osmank3.labebe.ui.TimeLimitsFragment"
-        android:label="fragment_time_limits"
-        tools:layout="@layout/titled_list_view" >
+        android:label="@string/time_limitations"
+        tools:layout="@layout/titled_list_view">
         <action
             android:id="@+id/action_timeLimits_to_children"
             app:destination="@id/nav_children" />
@@ -140,6 +147,11 @@
         <action
             android:id="@+id/action_permissions_to_firstStartFinish"
             app:destination="@id/nav_firstStartFinish" />
+        <action
+            android:id="@+id/action_permissions_to_account"
+            app:destination="@id/nav_account"
+            app:popUpTo="@id/nav_account"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -157,8 +169,8 @@
     <fragment
         android:id="@+id/nav_messages"
         android:name="net.osmank3.labebe.ui.MessagesFragment"
-        android:label="fragment_messages"
-        tools:layout="@layout/fragment_messages" >
+        android:label="@string/messages"
+        tools:layout="@layout/fragment_messages">
         <action
             android:id="@+id/action_messages_to_message"
             app:destination="@id/nav_message" />
@@ -167,7 +179,7 @@
     <fragment
         android:id="@+id/nav_message"
         android:name="net.osmank3.labebe.ui.MessageFragment"
-        android:label="fragment_message"
+        android:label="@string/message"
         tools:layout="@layout/fragment_message" />
 
     <fragment

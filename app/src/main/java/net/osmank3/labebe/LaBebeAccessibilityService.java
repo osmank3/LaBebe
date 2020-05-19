@@ -34,6 +34,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import net.osmank3.labebe.db.App;
+import net.osmank3.labebe.db.AppLog;
 import net.osmank3.labebe.db.Child;
 import net.osmank3.labebe.db.TimeLimit;
 import net.osmank3.labebe.view.carousel.CarouselItem;
@@ -57,6 +58,7 @@ public class LaBebeAccessibilityService extends AccessibilityService {
     private HashMap<String, App> generallyAllows;
     private HashMap<Child, HashMap<String, App>> childrenAllowedApp;
     private HashMap<Child, List<TimeLimit>> childrenTimeLimits;
+    private HashMap<Child, List<AppLog>> childrenAppLogs;
     private String focusedApp;
     private AlertDialog dialog;
     private List<Integer> viewIds;
@@ -70,53 +72,59 @@ public class LaBebeAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        //TODO block uninstalling this app in here
-        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
-                !event.getPackageName().equals(focusedApp) &&
-                !generallyAllows.containsKey(event.getPackageName().toString()) &&
-                launcherApps.containsKey(event.getPackageName().toString()) &&
-                !homeApps.containsKey(event.getPackageName().toString()) &&
-                !event.getPackageName().equals(getPackageName())) {
+        if (preferences.getBoolean("isLent", true)) {
+            //TODO block uninstalling this app in here
+            if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
+                    !event.getPackageName().equals(focusedApp) &&
+                    !generallyAllows.containsKey(event.getPackageName().toString()) &&
+                    launcherApps.containsKey(event.getPackageName().toString()) &&
+                    !homeApps.containsKey(event.getPackageName().toString()) &&
+                    !event.getPackageName().equals(getPackageName())) {
 
-            focusedApp = event.getPackageName().toString();
-            Log.d(TAG, "Focused app: " + focusedApp);
+                focusedApp = event.getPackageName().toString();
+                Log.d(TAG, "Focused app: " + focusedApp);
 
-            CarouselRecyclerView carousel = new CarouselRecyclerView(getBaseContext());
-            carousel.setViewsToChangeColor(viewIds);
-            carousel.setClipToPadding(false);
-            carousel.setOverScrollMode(View.OVER_SCROLL_NEVER);
+                CarouselRecyclerView carousel = new CarouselRecyclerView(getBaseContext());
+                carousel.setViewsToChangeColor(viewIds);
+                carousel.setClipToPadding(false);
+                carousel.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
-            CarouselItemAdapter adapter = new CarouselItemAdapter(carousel);
-            carousel.initialize(adapter);
+                CarouselItemAdapter adapter = new CarouselItemAdapter(carousel);
+                carousel.initialize(adapter);
 
-            List<CarouselItem> items = new ArrayList<>();
-            items.add(new CarouselItem(getBaseContext(), true));
-            for (Child child: children) {
-                items.add(new CarouselItem(getBaseContext(), child, true));
+                List<CarouselItem> items = new ArrayList<>();
+                items.add(new CarouselItem(getBaseContext(), true));
+                for (Child child : children) {
+                    items.add(new CarouselItem(getBaseContext(), child, true));
+                }
+
+                adapter.setItems(items);
+
+                if (dialog != null) {
+                    dialog.dismiss();
+                    dialog = null;
+                }
+                dialog = new AlertDialog.Builder(getBaseContext(), android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen)
+                        .setView(carousel)
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                dialog.dismiss();
+                                performGlobalAction(GLOBAL_ACTION_HOME);
+                            }
+                        })
+                        .setTitle(R.string.select_for_login)
+                        .create();
+
+                int alertType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_PHONE;
+                dialog.getWindow().setType(alertType);
+                dialog.show();
+            } else {
+                Log.d(TAG, "Passed app: " + event.getPackageName().toString());
             }
-
-            adapter.setItems(items);
-
-            dialog = new AlertDialog.Builder(getBaseContext(), android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen)
-                    .setView(carousel)
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            dialog.dismiss();
-                            performGlobalAction(GLOBAL_ACTION_HOME);
-                        }
-                    })
-                    .setTitle(R.string.select_for_login)
-                    .create();
-
-            int alertType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_PHONE;
-            dialog.getWindow().setType(alertType);
-            dialog.show();
-        } else {
-            Log.d(TAG, "Passed app: " + event.getPackageName().toString());
-        }
-        if (homeApps.containsKey(event.getPackageName().toString())) {
-            focusedApp = null;
+            if (homeApps.containsKey(event.getPackageName().toString())) {
+                focusedApp = null;
+            }
         }
     }
 
@@ -282,10 +290,16 @@ public class LaBebeAccessibilityService extends AccessibilityService {
                 dialog.dismiss();
             } else {
                 dialog.cancel();
-                Toast toast = Toast.makeText(getBaseContext(), R.string.you_can_not_use, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getBaseContext(), R.string.you_cannot_use, Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             }
         }
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        instance = null;
+        return super.onUnbind(intent);
     }
 }
