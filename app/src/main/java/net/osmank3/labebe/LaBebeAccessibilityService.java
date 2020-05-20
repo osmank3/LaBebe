@@ -25,11 +25,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -42,9 +44,13 @@ import net.osmank3.labebe.view.carousel.CarouselItemAdapter;
 import net.osmank3.labebe.view.carousel.CarouselRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LaBebeAccessibilityService extends AccessibilityService {
     public static LaBebeAccessibilityService instance;
@@ -58,7 +64,9 @@ public class LaBebeAccessibilityService extends AccessibilityService {
     private HashMap<String, App> generallyAllows;
     private HashMap<Child, HashMap<String, App>> childrenAllowedApp;
     private HashMap<Child, List<TimeLimit>> childrenTimeLimits;
-    private HashMap<Child, List<AppLog>> childrenAppLogs;
+    private HashMap<Child, TimeCounter> childrenTimeCounter;
+    private HashMap<Child, ListenerRegistration> childrenAppLogsReg;
+    private Timer timer;
     private String focusedApp;
     private AlertDialog dialog;
     private List<Integer> viewIds;
@@ -81,7 +89,7 @@ public class LaBebeAccessibilityService extends AccessibilityService {
                     !homeApps.containsKey(event.getPackageName().toString()) &&
                     !event.getPackageName().equals(getPackageName())) {
 
-                focusedApp = event.getPackageName().toString();
+                focusedAppChanged(event.getPackageName().toString());
                 Log.d(TAG, "Focused app: " + focusedApp);
 
                 CarouselRecyclerView carousel = new CarouselRecyclerView(getBaseContext());
@@ -123,7 +131,7 @@ public class LaBebeAccessibilityService extends AccessibilityService {
                 Log.d(TAG, "Passed app: " + event.getPackageName().toString());
             }
             if (homeApps.containsKey(event.getPackageName().toString())) {
-                focusedApp = null;
+                focusedAppChanged(null);
             }
         }
     }
@@ -144,12 +152,16 @@ public class LaBebeAccessibilityService extends AccessibilityService {
         generallyAllows = new HashMap<>();
         childrenAllowedApp = new HashMap<>();
         childrenTimeLimits = new HashMap<>();
+        childrenTimeCounter = new HashMap<>();
+        childrenAppLogsReg = new HashMap<>();
+
         viewIds = new ArrayList<>();
         viewIds.add(R.id.list_item_background);
         viewIds.add(R.id.list_item_text);
 
         fillPackageLists();
         setDatabaseQueries();
+        setDailyUpdate();
     }
 
     private void fillPackageLists() {
@@ -234,11 +246,86 @@ public class LaBebeAccessibilityService extends AccessibilityService {
                 });
     }
 
+    private void setDailyUpdate() {
+        Calendar now = Calendar.getInstance();
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.set(Calendar.HOUR_OF_DAY, 0);
+        tomorrow.set(Calendar.MINUTE, 0);
+        tomorrow.set(Calendar.SECOND, 0);
+        tomorrow.add(Calendar.DAY_OF_YEAR, 1);
+        timer = new Timer();
+        timer.scheduleAtFixedRate(
+                new TimerTask() {
+                        @Override
+                        public void run() {
+                            database.collection("users")
+                                    .document(preferences.getString("userUid", ""))
+                                    .collection("children")
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot snapshots) {
+                                            List<QueryDocumentSnapshot> children = new ArrayList<>();
+                                            for (QueryDocumentSnapshot doc : snapshots) {
+                                                if (doc.contains("name")) {
+                                                    children.add(doc);
+                                                }
+                                            }
+                                            setChildrenChanges(children);
+                                        }
+                                    });
+                        }
+            },
+            tomorrow.getTimeInMillis() - now.getTimeInMillis(),
+            86400000
+        );
+    }
+
     private void setChildrenChanges(List<QueryDocumentSnapshot> children) {
         if (children != null && children.size() > 0) {
             this.children.clear();
+            for (ListenerRegistration reg: childrenAppLogsReg.values()) {
+                reg.remove();
+            }
+            childrenAppLogsReg = new HashMap<>();
+            Calendar now = Calendar.getInstance();
+            now.set(Calendar.HOUR_OF_DAY, 0);
+            now.set(Calendar.MINUTE, 0);
+            now.set(Calendar.SECOND, 0);
+            now.setTimeInMillis(now.getTimeInMillis());
             for (QueryDocumentSnapshot doc: children) {
-                Child child = doc.toObject(Child.class);
+                final Child child = doc.toObject(Child.class);
+                childrenAppLogsReg.put(
+                        child,
+                        database.collection("users")
+                                .document(preferences.getString("userUid", ""))
+                                .collection("children")
+                                .document(child.getId())
+                                .collection("logs")
+                                .orderBy("start")
+                                .startAt(now.getTime())
+                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                                        if (e != null) {
+                                            Log.w(TAG, "Listen failed", e);
+                                            return;
+                                        }
+
+                                        String source = snapshots != null && snapshots.getMetadata().hasPendingWrites()
+                                                ? "Local" : "Server";
+
+                                        List<QueryDocumentSnapshot> logs = new ArrayList<>();
+                                        for (QueryDocumentSnapshot doc: snapshots) {
+                                            if (doc.contains("appName")) {
+                                                logs.add(doc);
+                                            }
+                                        }
+                                        setUsageLogs(child, logs);
+                                    }
+                                })
+                );
+
                 this.children.add(child);
                 childrenAllowedApp.put(child, new HashMap<String, App>());
                 if (doc.contains("allowedApps")) {
@@ -259,6 +346,23 @@ public class LaBebeAccessibilityService extends AccessibilityService {
                 Log.i(TAG, "Child: " + child.getName() + " information is ready");
             }
             Log.i(TAG, "Children list, limits and decisions updated");
+        }
+    }
+
+    private void setUsageLogs(Child child, List<QueryDocumentSnapshot> logs) {
+        List<AppLog> appLogs = new ArrayList<>();
+        for (QueryDocumentSnapshot log: logs) {
+            appLogs.add(log.toObject(AppLog.class));
+        }
+        for (AppLog appLog: appLogs) {
+            for (TimeLimit timeLimit: childrenTimeLimits.get(child)) {
+                if (timeLimit.getType().equals(TimeLimit.Type.DailyHours) ||
+                        (timeLimit.getType().equals(TimeLimit.Type.AppDailyHours) && timeLimit.getAppName().equals(appLog.getAppName()))) {
+                    Date newDate = new Date();
+                    newDate.setTime(timeLimit.getDuration().getTime() - (appLog.getEnd().getTime() - appLog.getStart().getTime()));
+                    timeLimit.setDuration(newDate);
+                }
+            }
         }
     }
 
@@ -285,9 +389,31 @@ public class LaBebeAccessibilityService extends AccessibilityService {
             dialog.dismiss();
         } else {
             if (childrenAllowedApp.get(child).containsKey(focusedApp)) {
-                //TODO time limitations will add here
-                Log.d(TAG, child.getName() + " can access the application");
-                dialog.dismiss();
+                TimeCounter timeCounter;
+                if (childrenTimeCounter.containsKey(child))
+                    timeCounter = childrenTimeCounter.get(child);
+                else {
+                    timeCounter = new TimeCounter(child, childrenTimeLimits.get(child), focusedApp);
+                    childrenTimeCounter.put(child, timeCounter);
+                }
+                timeCounter.setFocusedApp(focusedApp);
+                if (timeCounter.canAccessNow()) {
+                    Log.d(TAG, child.getName() + " can access the application");
+                    timeCounter.start();
+                    dialog.dismiss();
+                } else {
+                    dialog.cancel();
+                    String message = "";
+                    if (timeCounter.getReason() == TimeLimit.Type.LimitedHours)
+                        message = getString(R.string.you_are_in_limited_hours);
+                    else if (timeCounter.getReason() == TimeLimit.Type.DailyHours)
+                        message = getString(R.string.you_cannot_use_today);
+                    else if (timeCounter.getReason() == TimeLimit.Type.AppDailyHours)
+                        message = getString(R.string.you_cannot_use_today_app);
+                    Toast toast = Toast.makeText(getBaseContext(), message,Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
             } else {
                 dialog.cancel();
                 Toast toast = Toast.makeText(getBaseContext(), R.string.you_cannot_use, Toast.LENGTH_LONG);
@@ -297,6 +423,14 @@ public class LaBebeAccessibilityService extends AccessibilityService {
         }
     }
 
+    private void focusedAppChanged(String newFocus) {
+        if (childrenTimeCounter.size() > 0) {
+            for (TimeCounter timeCounter : childrenTimeCounter.values()) {
+                timeCounter.stop();
+            }
+        }
+        focusedApp = newFocus;
+    }
     @Override
     public boolean onUnbind(Intent intent) {
         instance = null;

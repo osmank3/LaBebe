@@ -110,6 +110,7 @@ public class TimeLimitAlertView extends ConstraintLayout {
         btnDelete = findViewById(R.id.btnDelete);
 
         formatter = new SimpleDateFormat("HH:mm");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     private void registerEventHandlers() {
@@ -151,6 +152,11 @@ public class TimeLimitAlertView extends ConstraintLayout {
                 final Button timeText = (Button) v;
                 final Calendar time = Calendar.getInstance();
                 time.setTimeZone(TimeZone.getTimeZone("UTC"));
+                time.clear(Calendar.YEAR);
+                time.clear(Calendar.MONTH);
+                time.clear(Calendar.SECOND);
+                time.set(Calendar.DAY_OF_YEAR, 1);
+                time.setTimeInMillis(time.getTimeInMillis());
                 if (v.getId() == btnStartTime.getId() && timeLimit.getStart() != null) {
                     time.setTime(timeLimit.getStart());
                 } else if (v.getId() == btnEndTime.getId() && timeLimit.getEnd() != null) {

@@ -90,6 +90,9 @@
     <string name="about_text">LaBebe - Parental Management Application\n\nLicensed under GPL v3\n\nOsman Karagöz [osmank3 [at] gmail.com], 2020</string>
     <string name="menu_about">About</string>
     <string name="you_cannot_use">You cannot use this application because your parent do not allow to you use it.</string>
+    <string name="you_are_in_limited_hours">You are in limited blocked hours, which determined by your parent.</string>
+    <string name="you_cannot_use_today">You cannot use applications because your time period defined for today has expired.</string>
+    <string name="you_cannot_use_today_app">You cannot use this application because your time period defined for today has expired.</string>
     <string name="password_change">Change Password</string>
     <string name="messages">Messages</string>
     <string name="statistics">Statistics</string>
