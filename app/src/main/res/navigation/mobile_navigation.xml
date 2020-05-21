@@ -166,7 +166,7 @@
         android:id="@+id/nav_messages"
         android:name="net.osmank3.labebe.ui.MessagesFragment"
         android:label="@string/messages"
-        tools:layout="@layout/fragment_messages">
+        tools:layout="@layout/titled_list_view">
         <action
             android:id="@+id/action_messages_to_message"
             app:destination="@id/nav_message" />

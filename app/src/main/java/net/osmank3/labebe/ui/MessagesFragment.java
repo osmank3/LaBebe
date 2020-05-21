@@ -8,66 +8,122 @@
 
 package net.osmank3.labebe.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import net.osmank3.labebe.MainActivity;
 import net.osmank3.labebe.R;
+import net.osmank3.labebe.db.Child;
+import net.osmank3.labebe.view.ImageTextView;
+import net.osmank3.labebe.view.TitledListView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MessagesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MessagesFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public MessagesFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MessagesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MessagesFragment newInstance(String param1, String param2) {
-        MessagesFragment fragment = new MessagesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    private TitledListView listView;
+    private FirebaseFirestore database;
+    private SharedPreferences preferences;
+    private List<Child> children;
+    private Child child;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_messages, container, false);
+        listView = new TitledListView(getContext());
+
+        if (getArguments() != null) {
+            child = (Child) getArguments().getSerializable("child");
+        }
+
+        initComponents();
+        registerEventHandlers();
+
+        return listView;
+    }
+
+    private void initComponents() {
+        preferences = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), MODE_PRIVATE);
+        database = FirebaseFirestore.getInstance();
+
+        listView.setTitle(null);
+        listView.showButton(false);
+
+        children = new ArrayList<>();
+
+        database.collection("users").document(preferences.getString("userUid", ""))
+                .collection("children")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document: task.getResult()) {
+                                Child child = document.toObject(Child.class);
+                                child.setId(document.getId());
+                                children.add(child);
+                            }
+                            fillList();
+                        }
+                    }
+                });
+
+        fillList();
+    }
+
+    private void registerEventHandlers() {
+
+    }
+
+    private void fillList() {
+        listView.clearList();
+        if (child != null) {
+            ImageTextView parent = new ImageTextView(getContext());
+            parent.setText(R.string.parent);
+            parent.setImage(R.drawable.baseline_supervisor_account_black_24dp);
+            parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle args = new Bundle();
+                    args.putSerializable("child", child);
+                    MainActivity.navController.navigate(R.id.action_messages_to_message, args);
+                }
+            });
+            listView.addToList(parent);
+        }
+        for (final Child aChild: children) {
+            if (child != null && child.getId().equals(aChild.getId()))
+                continue;
+            ImageTextView childLine = new ImageTextView(getContext());
+            childLine.setText(aChild.getName());
+            childLine.setImage(R.drawable.round_person_outline_black_48dp);
+            childLine.setImageColor(aChild.getColor());
+            childLine.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle args = new Bundle();
+                    args.putSerializable("messageTo", aChild);
+                    if(child != null) {
+                        args.putSerializable("child", child);
+                    }
+                    MainActivity.navController.navigate(R.id.action_messages_to_message, args);
+                }
+            });
+            listView.addToList(childLine);
+        }
     }
 }

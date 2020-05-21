@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        navController.navigate(R.id.nav_home, null, new NavOptions.Builder().setPopUpTo(R.id.nav_home, true).build());
+        if (!preferences.getBoolean("isFirstStart", true))
+            navController.navigate(R.id.nav_home, null, new NavOptions.Builder().setPopUpTo(R.id.nav_home, true).build());
     }
 
     private void registerEventHandlers() {

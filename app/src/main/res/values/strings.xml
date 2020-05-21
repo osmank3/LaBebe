@@ -108,4 +108,7 @@
     <string name="time_period">Time Period</string>
     <string name="today">Today</string>
     <string name="choose_time_period">Choose Period</string>
+    <string name="message_required">Message required!</string>
+    <string name="new_message">New Message</string>
+    <string name="you_have_new_message">"%s, you have new message from %s. "</string>
 </resources>

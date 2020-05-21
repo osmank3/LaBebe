@@ -10,6 +10,11 @@ package net.osmank3.labebe;
 
 import android.accessibilityservice.AccessibilityService;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,9 +29,11 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,6 +45,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import net.osmank3.labebe.db.App;
 import net.osmank3.labebe.db.AppLog;
 import net.osmank3.labebe.db.Child;
+import net.osmank3.labebe.db.Message;
 import net.osmank3.labebe.db.TimeLimit;
 import net.osmank3.labebe.view.carousel.CarouselItem;
 import net.osmank3.labebe.view.carousel.CarouselItemAdapter;
@@ -58,6 +66,10 @@ public class LaBebeAccessibilityService extends AccessibilityService {
     private FirebaseAuth auth;
     private FirebaseFirestore database;
     private SharedPreferences preferences;
+    private NotificationManager nm;
+    private NotificationChannel notificationChannel;
+    final private int nmId = 1;
+    private String notificationChannelId, notificationChannelName;
     private List<Child> children;
     private HashMap<String, App> homeApps;
     private HashMap<String, App> launcherApps;
@@ -145,6 +157,16 @@ public class LaBebeAccessibilityService extends AccessibilityService {
         auth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
         preferences = getSharedPreferences(getResources().getString(R.string.app_name), MODE_PRIVATE);
+        nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationChannelId = getApplication().getPackageName() + ".channel";
+        notificationChannelName = "LaBebeChannel";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = nm.getNotificationChannel(notificationChannelId);
+            if (notificationChannel == null) {
+                notificationChannel = new NotificationChannel(notificationChannelId, notificationChannelName, NotificationManager.IMPORTANCE_HIGH);
+                nm.createNotificationChannel(notificationChannel);
+            }
+        }
 
         children = new ArrayList<>();
         homeApps = new HashMap<>();
@@ -242,6 +264,29 @@ public class LaBebeAccessibilityService extends AccessibilityService {
                             }
                         }
                         setChildrenChanges(children);
+                    }
+                });
+
+        database.collection("users")
+                .document(preferences.getString("userUid", ""))
+                .collection("messages")
+                .whereEqualTo("read", false)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed", e);
+                            return;
+                        }
+
+                        String source = snapshots != null && snapshots.getMetadata().hasPendingWrites()
+                                ? "Local" : "Server";
+
+                        for (DocumentChange doc: snapshots.getDocumentChanges()) {
+                            if (doc.getType() == DocumentChange.Type.ADDED) {
+                                showNewMessageNotification(doc.getDocument().toObject(Message.class));
+                            }
+                        }
                     }
                 });
     }
@@ -431,9 +476,38 @@ public class LaBebeAccessibilityService extends AccessibilityService {
         }
         focusedApp = newFocus;
     }
+
     @Override
     public boolean onUnbind(Intent intent) {
         instance = null;
         return super.onUnbind(intent);
+    }
+
+    private void showNewMessageNotification(Message message) {
+        Child from = null, to = null;
+        for (Child child: children) {
+            if (child.getId().equals(message.getFrom())) {
+                from = child;
+            }
+            if (child.getId().equals(message.getTo())) {
+                to = child;
+            }
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), notificationChannelId);
+        builder.setContentTitle(getBaseContext().getString(R.string.new_message));
+        builder.setContentText(getBaseContext().getString(R.string.you_have_new_message,
+                to != null ? to.getName() : getBaseContext().getResources().getText(R.string.parent),
+                from != null ? from.getName() : getBaseContext().getResources().getText(R.string.parent)));
+        builder.setSmallIcon(R.mipmap.ic_launcher_round);
+        builder.setAutoCancel(true);
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), nmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder.setContentIntent(pendingIntent);
+
+        Notification notification = builder.build();
+        nm.notify(nmId, notification);
     }
 }
