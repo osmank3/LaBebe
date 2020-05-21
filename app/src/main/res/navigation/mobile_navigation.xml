@@ -53,8 +53,8 @@
 
     <fragment
         android:id="@+id/nav_statistics"
-        android:name="net.osmank3.labebe.ui.statistics.StatisticsFragment"
-        android:label="fragment_statistics"
+        android:name="net.osmank3.labebe.ui.StatisticsFragment"
+        android:label="@string/statistics"
         tools:layout="@layout/fragment_statistics" />
     <fragment
         android:id="@+id/nav_firstStartWelcome"
@@ -123,10 +123,6 @@
         <action
             android:id="@+id/action_child_to_timeLimits"
             app:destination="@id/nav_timeLimits" />
-        <argument
-            android:name="childId"
-            android:defaultValue="0"
-            app:argType="integer" />
     </fragment>
 
     <fragment

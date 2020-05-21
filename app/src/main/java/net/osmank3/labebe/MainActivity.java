@@ -22,6 +22,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -48,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
         initComponents();
         registerEventHandlers();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        navController.navigate(R.id.nav_home, null, new NavOptions.Builder().setPopUpTo(R.id.nav_home, true).build());
     }
 
     private void registerEventHandlers() {

@@ -104,4 +104,8 @@
     <string name="child">Child</string>
     <string name="message">Message</string>
     <string name="get_back">Get back</string>
+    <string name="all_time">All Time</string>
+    <string name="time_period">Time Period</string>
+    <string name="today">Today</string>
+    <string name="choose_time_period">Choose Period</string>
 </resources>
