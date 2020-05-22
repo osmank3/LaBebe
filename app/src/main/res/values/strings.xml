@@ -7,20 +7,15 @@
   -->
 
 <resources>
-    <string name="app_name">LaBebe</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="app_name" translatable="false">LaBebe</string>
+    <string name="nav_header_title" translatable="false">@string/app_name</string>
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_account">Account</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="welcome">Welcome to LaBebe parental control application!\n\nThis application protects your child from blocked applications and limiting time for using this device.\n\nFirst of all this application needs some settings and permissions.\n\nLets do some settings, press bellowing button…</string>
+    <string name="welcome">Welcome to LaBebe parental control application!  This application protects your child from blocked applications and limiting time for using this device.  First of all this application needs some settings and permissions.  Lets do some settings, press bellowing button…</string>
     <string name="start_first_install">Start Installing</string>
     <string name="or">OR</string>
     <string name="forgottenPassword">Did you forget your password?</string>
@@ -28,10 +23,10 @@
     <string name="sign_up">Sign Up</string>
     <string name="password">Password</string>
     <string name="email">E-mail</string>
-    <string name="email_required">Email address is required!</string>
+    <string name="email_required">E-mail address is required!</string>
     <string name="password_required">Password is required!</string>
     <string name="authentication_failed">Authentication failed!</string>
-    <string name="user_not_found">User Not Found</string>
+    <string name="user_not_found">User Not Found!</string>
     <string name="password_incorrect">Password is incorrect, please try again!</string>
     <string name="unknown_issue">Unknown issue, please try again!</string>
     <string name="too_many_login_try">Too many unsuccessful login attempts. Please try again later.</string>
@@ -54,7 +49,7 @@
     <string name="color">Color</string>
     <string name="pick_color">Pick a color</string>
     <string name="password_reset">Password reset is successful. On first access new password will installed.</string>
-    <string name="field_required">This field is required</string>
+    <string name="field_required">This field is required!</string>
     <string name="delete">Delete</string>
     <string name="girl">Girl</string>
     <string name="boy">Boy</string>
@@ -103,7 +98,7 @@
     <string name="are_you_sure_to_uninstall_description">If you want to delete this application select OK. When you select it, Accessibility service will stop and you can uninstall this application from applications.</string>
     <string name="child">Child</string>
     <string name="message">Message</string>
-    <string name="get_back">Get back</string>
+    <string name="get_back">Get Back Device</string>
     <string name="all_time">All Time</string>
     <string name="time_period">Time Period</string>
     <string name="today">Today</string>
@@ -111,4 +106,5 @@
     <string name="message_required">Message required!</string>
     <string name="new_message">New Message</string>
     <string name="you_have_new_message">"%s, you have new message from %s. "</string>
+    <string name="nav_header_subtitle" translatable="false" />
 </resources>

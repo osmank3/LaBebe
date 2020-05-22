@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020. All rights reserved.
+  ~
+  ~ Author: Osman Karagöz
+  ~ Licensed under the GNU General Public License, version 3.
+  ~ See the file http://www.gnu.org/copyleft/gpl.txt
+  -->
+
+<resources>
+    <string name="menu_home">Anasayfa</string>
+    <string name="menu_account">Hesap</string>
+    <string name="welcome">LaBebe ebeveyn kontrol uygulamasına hoşgeldiniz! Bu uygulama çocuğunuzu engellediğiniz uygulamalardan korur ve cihazı sadece belirlediğiniz süre boyunca kullanmasını sağlar. İlk olarak bu uygulama bazı ayarlara ve izinlere ihtiyaç duyuyor. Hadi aşağıdaki düğmeye basarak bazı ayarları yapalım</string>
+    <string name="start_first_install">Kuruluma Başla</string>
+    <string name="or">Ya Da</string>
+    <string name="forgottenPassword">Parolanızı mı unuttunuz?</string>
+    <string name="login">Oturum Aç</string>
+    <string name="sign_up">Hesap Oluştur</string>
+    <string name="password">Parola</string>
+    <string name="email">E-posta</string>
+    <string name="email_required">E-posta gereklidir!</string>
+    <string name="password_required">Parola gereklidir!</string>
+    <string name="authentication_failed">Yetkilendirme başarısız!</string>
+    <string name="user_not_found">Kullanıcı Bulunamadı!</string>
+    <string name="password_incorrect">Parola hatalı, lütfen tekrar deneyin!</string>
+    <string name="unknown_issue">Bilinmeyen hata, lütfen tekrar deneyin!</string>
+    <string name="too_many_login_try">Çok fazla başarısız giriş denemesi. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="password_reset_mail_sent">Parola sıfırlama bağlantısı eposta adresinize gönderildi. Lütfen açıklamaları takip edin!</string>
+    <string name="re_password">Parolayı tekrar girin</string>
+    <string name="password_mismatch">Parola eşleşmiyor, lütfen tekrar deneyin!</string>
+    <string name="children">Çocuklar</string>
+    <string name="parent">Ebeveyn</string>
+    <string name="device_type_selection">Bu cihaz kim tarafından kullanılıyor?</string>
+    <string name="next_page">Sonraki Sayfa</string>
+    <string name="general_app_decisions">Lütfen herkes tarafından sınırsızca kullanılacak uygulamaları seçin</string>
+    <string name="child_app_decisions">Lütfen çocuğunuzun kullanmasına izin verdiğiniz uygulamaları seçin</string>
+    <string name="there_is_no_child">Henüz çocuk eklenmemiş. Lütfen bir veya daha fazla çocuk eklemek için artı düğmesini kullanın!</string>
+    <string name="set_parent_password">Ebeveyn erişim parolasının ayarlanması. Bu parola uygulamanın ayarlarını değiştirmek ve uygulamayı artık gerek duymadığınızda kaldırmak için gerekli.</string>
+    <string name="name">Ad</string>
+    <string name="born">Doğum Yılı</string>
+    <string name="app_decisions">Uygulama Kararları</string>
+    <string name="time_limitations">Zaman Kısıtlamaları</string>
+    <string name="reset_password">Parolayı Sıfırla</string>
+    <string name="color">Renk</string>
+    <string name="pick_color">Renk seçin</string>
+    <string name="password_reset">Parola sıfırlama tamamlandı. İlk erişimde yeni parola ayarlanacak.</string>
+    <string name="field_required">Bu alan gerekli!</string>
+    <string name="delete">Sil</string>
+    <string name="girl">Kız</string>
+    <string name="boy">Erkek</string>
+    <string name="are_you_sure_to_delete">Çocuğu silmek istediğinize emin misiniz?</string>
+    <string name="daily">Günlük</string>
+    <string name="time_limit_type">Zaman Kısıt Türü</string>
+    <string name="limited_hours">Kısıtlı Saatler</string>
+    <string name="daily_time_limits">Günlük Zaman Sınırı</string>
+    <string name="app_time_limit">Uygulama Zaman Sınırı</string>
+    <string name="monday">Pazartesi</string>
+    <string name="tuesday">Salı</string>
+    <string name="wednesday">Çarşamba</string>
+    <string name="thursday">Perşembe</string>
+    <string name="friday">Cuma</string>
+    <string name="saturday">Cumartesi</string>
+    <string name="sunday">Pazar</string>
+    <string name="start_time">Başlangıç</string>
+    <string name="end_time">Bitiş</string>
+    <string name="duration">Süre</string>
+    <string name="choose_app">Uygulama Seç</string>
+    <string name="new_time_limit">Yeni Zaman Kısıtı</string>
+    <string name="cannot_save_limitation">Kısıtlama kaydedilemedi. Lütfen tüm alanları doldurun.</string>
+    <string name="child_time_limitations">Lütfen çocuğunuzun uygulamaları kullanabileceği zaman kısıtları ekleyin</string>
+    <string name="set_application_permissions_first_time">Bu uygulama düzgün çalışabilmek için aşağıda listelenen izin ve erişilebilirlik servisine ihtiyaç duyar.</string>
+    <string name="permission_application_overlay">Bu izin engellenmiş uygulamaları açmaya çalışan kullanıcıyı uyarmak için gerekli</string>
+    <string name="permission_application_overlay_checkbox">Uygulamaların üzerinde göstermeye izin ver</string>
+    <string name="permission_accessibility_service_checkbox">LaBebe erişilebilirlik servisini başlatın</string>
+    <string name="permission_accessibility_service">Bu servis hangi uygulamanın ne kadar kullandığını izler ve engellenmiş uygulamanın açılmasını engeller.</string>
+    <string name="permission_on_parental_device">\n\nBu ayarlar ebeveyn cihazı için gerekli değildir.\nAncak cihazınızı çocuklarınıza ödünç vermeden önce bu izinleri vermiş olmanız gerekir.</string>
+    <string name="finish_first_install">Kurulumu Tamamla</string>
+    <string name="finish">Tebrikler!\n\nİlk kurulum tamamlandı.\n\nEğer herhangi bir ayarı değiştirmek ve çocuklarınıza bildirim göndermek için bu uygulamayı daha sonra tekrar açabilirsiniz.\n\nLütfen ebeveyn erişim parolanızı unutmayınız.\n\nOluşturulan çoçukların parolaları çocuklarınızın ilk kullanımında ayarlanacak</string>
+    <string name="select_for_login">Oturum Açmak için Seçin</string>
+    <string name="about_text">LaBebe - Ebeveyn Yönetim Uygulaması\n\nGPL v3 altında lisanslanmıştır\n\nOsman Karagöz [osmank3 [at] gmail.com], 2020</string>
+    <string name="menu_about">Hakkında</string>
+    <string name="you_cannot_use">Bu uygulamayı kullanamazsın çünkü ebeveynin kullanmana izin vermemiş.</string>
+    <string name="you_are_in_limited_hours">Şuanda ebeveynin tarafından belirlenmiş olan engellenmiş kısıtlı saatlerdesin</string>
+    <string name="you_cannot_use_today">Uygulamaları kullanamazsın çünkü tanımlanan günlük süren doldu.</string>
+    <string name="you_cannot_use_today_app">Bu uygulamayı kullanamazsın çünkü uygulama için tanımlanan günlük süren doldu.</string>
+    <string name="password_change">Parolayı Değiştir</string>
+    <string name="messages">Mesajlar</string>
+    <string name="statistics">İstatistikler</string>
+    <string name="lend">Cihazı Ödünç Ver</string>
+    <string name="uninstall">Kaldır</string>
+    <string name="password_new">Yeni Parola</string>
+    <string name="are_you_sure_to_uninstall">Bu uygulamayı kaldırmak istediğinize emin misiniz?</string>
+    <string name="are_you_sure_to_uninstall_description">Eğer bu uygulamayı kaldırmak istiyorsanız TAMAM\'a basın. Tamam\'ı seçtiğinizde erişilebilirlik servisi durdurulacak ve uygulamalardan bu uygulamayı kaldırabileceksiniz.</string>
+    <string name="child">Çocuk</string>
+    <string name="message">Mesaj</string>
+    <string name="get_back">Cihazı Geri Al</string>
+    <string name="all_time">Tüm Zamanlar</string>
+    <string name="time_period">Zaman Aralığı</string>
+    <string name="today">Bugün</string>
+    <string name="choose_time_period">Aralığı Seçin</string>
+    <string name="message_required">Mesaj gerekli!</string>
+    <string name="new_message">Yeni Mesaj</string>
+    <string name="you_have_new_message">%s, %s size yeni mesaj gönderdi</string>
+    <string name="action_settings">Ayarlar</string>
+</resources>
