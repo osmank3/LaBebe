@@ -214,6 +214,11 @@ public class MessageFragment extends Fragment {
             card.setRadius(root.getResources().getDimension(R.dimen.margin_big));
             llMessages.addView(card);
         }
-        scrollView.fullScroll(View.FOCUS_DOWN);
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
     }
 }

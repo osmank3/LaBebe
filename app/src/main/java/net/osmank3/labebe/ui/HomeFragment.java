@@ -91,11 +91,10 @@ public class HomeFragment extends Fragment {
 
     private void fillItems() {
         items.clear();
-        items.add(new CarouselItem(getContext()));
+        items.add(new CarouselItem(root.getContext()));
         for (Child child: children) {
-            items.add(new CarouselItem(getContext(), child));
+            items.add(new CarouselItem(root.getContext(), child));
         }
-
         adapter.setItems(items);
     }
 

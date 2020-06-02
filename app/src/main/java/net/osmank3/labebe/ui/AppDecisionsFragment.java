@@ -205,7 +205,8 @@ public class AppDecisionsFragment extends Fragment {
                 }
 
                 //TODO this database process must send background
-                for (App app : apps.values()) {
+                //This database process needs for web application which not prepared yet. When I need it I will uncomment these lines
+                /*for (App app : apps.values()) {
                     database.collection("applications")
                             .document(app.getId())
                             .set(app)
@@ -215,7 +216,7 @@ public class AppDecisionsFragment extends Fragment {
                                     Log.w("LaBebe", "Error adding document", e);
                                 }
                             });
-                }
+                }*/
             }
 
             Intent pmIntent = new Intent(Intent.ACTION_MAIN);
